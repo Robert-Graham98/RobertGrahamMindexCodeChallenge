@@ -1,5 +1,6 @@
 package com.mindex.challenge.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Employee {
@@ -8,8 +9,7 @@ public class Employee {
     private String lastName;
     private String position;
     private String department;
-    private List<Employee> directReports;
-    private Compensation compensation;
+    private List<Employee> directReports = new ArrayList<Employee>();
 
     public Employee() {
     }
@@ -62,11 +62,4 @@ public class Employee {
         this.directReports = directReports;
     }
 
-    public Compensation getCompensation() {
-        return compensation;
-    }
-
-    public void setCompensation(Compensation compensation) {
-        this.compensation = compensation;
-    }
 }

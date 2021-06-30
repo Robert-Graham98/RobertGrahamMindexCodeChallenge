@@ -1,6 +1,7 @@
 package com.mindex.challenge.service.impl;
 
 import com.mindex.challenge.data.Compensation;
+import com.mindex.challenge.data.CompensationForm;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.service.EmployeeService;
 import org.junit.Before;
@@ -84,54 +85,23 @@ public class EmployeeServiceImplTest {
 //<!----------------------------------------------Code done by Robert Graham below-------------------------------------------------!>
     @Test
     public void testReports(){//this is testing the functionality of counting the number of reports belonging to an employee
-        //First I create the employee that will have the reports
-        Employee test = new Employee();
-        test.setFirstName("Robert");
-        test.setLastName("Graham");
-        test.setPosition("Software Developer");
-        test.setDepartment("Engineering");
-        ArrayList<Employee> testArray = new ArrayList<Employee>();
-        testArray.add(new Employee());
-        testArray.add(new Employee());
-        testArray.add(new Employee());
-        test.setDirectReports(testArray);
-        Employee createdEmployee = restTemplate.postForEntity(employeeUrl, test, Employee.class).getBody();
-
-        //after this I retrieved this created employee and compared the number of reports I am expecting to the number I received
-        Employee readEmployee = restTemplate.getForEntity(employeeIdUrl, Employee.class, createdEmployee.getEmployeeId()).getBody();
-        assertEquals("{\"employee ID\":\""+ readEmployee.getEmployeeId()+"\",\"Number Of Reports\" : 3}",employeeService.reports(readEmployee.getEmployeeId()));
+        //For this test I get the reports for John Lennon whose number of reports should be 4
+        assertEquals(4,employeeService.getReports("16a596ae-edd3-4847-99fe-c4518e82c86f").getNumberOfReports());
     }
 
     @Test
     public void testCompensation(){//this is testing the functionality of getting an employees compensation and updating it
-        //First we will again create an employee
-        Employee test = new Employee();
-        test.setFirstName("Robert");
-        test.setLastName("Graham");
-        test.setPosition("Software Developer");
-        test.setDepartment("Engineering");
-        Compensation testCompensation = new Compensation();
-        testCompensation.setSalary(1245.52);
-        testCompensation.setEffectiveDate("7/25/21");
-        test.setCompensation(testCompensation);
-        Employee createdEmployee = restTemplate.postForEntity(employeeUrl, test, Employee.class).getBody();
+        //Check create Compensation and reading the compensation
+        CompensationForm compensationForm = new CompensationForm();
+        compensationForm.setEffectiveDate("7/3/2021");
+        compensationForm.setSalary(5000.00);
+
+        employeeService.setCompensation("16a596ae-edd3-4847-99fe-c4518e82c86f",compensationForm);
+        assertEquals(5000.00,employeeService.readCompensation("16a596ae-edd3-4847-99fe-c4518e82c86f").getSalary(),.02);
+        assertEquals("7/3/2021",employeeService.readCompensation("16a596ae-edd3-4847-99fe-c4518e82c86f").getEffectiveDate());
 
 
-        //Check Read Compensation
-        Employee readEmployee = restTemplate.getForEntity(employeeIdUrl, Employee.class, createdEmployee.getEmployeeId()).getBody();
-        System.out.println(readEmployee.getCompensation());
-        assertEquals(createdEmployee.getCompensation().getSalary(),employeeService.readCompensation(readEmployee.getEmployeeId()).getSalary(),0.02);
-        assertEquals(createdEmployee.getCompensation().getEffectiveDate(),employeeService.readCompensation(readEmployee.getEmployeeId()).getEffectiveDate());
 
-        //Check update Compensation
-        Compensation newCompensation = new Compensation();
-        newCompensation.setSalary(5);
-        newCompensation.setEffectiveDate("8/1/21");
-        createdEmployee.setCompensation(newCompensation);
-
-        employeeService.setCompensation(readEmployee.getEmployeeId(),newCompensation);
-        assertEquals(5,employeeService.readCompensation(readEmployee.getEmployeeId()).getSalary(),.02);
-        assertEquals("8/1/21",employeeService.readCompensation(readEmployee.getEmployeeId()).getEffectiveDate());
 
     }
 

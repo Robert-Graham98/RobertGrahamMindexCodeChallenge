@@ -1,7 +1,9 @@
 package com.mindex.challenge.controller;
 
 import com.mindex.challenge.data.Compensation;
+import com.mindex.challenge.data.CompensationForm;
 import com.mindex.challenge.data.Employee;
+import com.mindex.challenge.data.ReportingStructure;
 import com.mindex.challenge.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +40,9 @@ public class EmployeeController {
     }
     //<!----------------------------------------------Code done by Robert Graham below-------------------------------------------------!>
     @GetMapping("/reports/{id}")
-    public String reports(@PathVariable String id) {
+    public ReportingStructure reports(@PathVariable String id) {
         LOG.debug("Received employee create request for id [{}]", id);
-
-        return employeeService.reports(id);
+        return employeeService.getReports(id);
     }
 
     @GetMapping("/compensation/{id}")
@@ -51,11 +52,11 @@ public class EmployeeController {
         return employeeService.readCompensation(id);
     }
 
-    @PutMapping("/compensation/{id}")
-    public Compensation setCompensation(@PathVariable String id, @RequestBody Compensation compensation){
-        LOG.debug("Received request to set compensation of [{}]",compensation);
+    @PostMapping("/compensation/{id}")
+    public Compensation setCompensation(@PathVariable String id, @RequestBody CompensationForm compensationForm){//Note this uses the compensation form object in the request body
+       LOG.debug("Received request to set compensation of [{}] for Employee Id [{}] starting on [{}]",compensationForm.getSalary(),id,compensationForm.getEffectiveDate());
 
-        return employeeService.setCompensation(id,compensation);
+        return employeeService.setCompensation(id,compensationForm);
     }
 
 
