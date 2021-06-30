@@ -25,13 +25,15 @@ Employee.java
 Compensation.java
  -This class is used with CompensationRepository to store the compensation for employees along with their effective date. In order to get it working I had to change things slightly from the instructions. I added a field called employee ID that stores the ID for the given employee and basically uses it as a foreign key/primary key
 
-Compensation Repository
+CompensationRepository.java
 - This class stores compensations for employees using Mongo Repository
 - the one function of findByEmployee ID functions the same as the one in Employee Repository except this returns a compensation
 
-Compensation Form 
+CompensationForm.java 
 - this has two attributes of effective date and salary and is used when creating a new compensation for an employee
 
+ReportingStructure.java
+-Consists of an employee and their number of reports and is used to return this information
 
 
 There are also test cases in EmployeeServiceImplTest.java that test the Reports functionality and the Compensation functionality these have also been updated and pass
